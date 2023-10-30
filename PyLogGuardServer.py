@@ -37,7 +37,7 @@ class Log(BaseModel):
     def __init__(self, date: str, device: str,type : str, msg: str, **data):
         super().__init__(date=date, device=device, type=type, msg=msg, **data)
 
-
+#Get Route:
 
 @app.get("/")
 def read_root():
@@ -47,7 +47,33 @@ def read_root():
 def read_all():
     cursor.execute("SELECT * FROM logs")
     return cursor.fetchall()
+
+####################
+
+#Post Route:
+
+@app.post("/add")
+def post_add(log : Log):
+    try:
+        cursor.execute("INSERT INTO logs (date, device, type, msg) VALUES (?, ?, ?, ?)", (log.date, log.device, log.type, log.msg))
+        conn.commit()
+        return {"OK!"}
+
+    except Exception as e:
+        return {"Error:", str(e)}
     
+@app.post("/addTemp")   #same as /add, but not persistent. Only for testing purposes
+def post_add(log : Log):
+    try:
+        cursor.execute("INSERT INTO logs (date, device, type, msg) VALUES (?, ?, ?, ?)", (log.date, log.device, log.type, log.msg))
+        return {"OK!"}
+
+    except Exception as e:
+        return {"Error:", str(e)}
+
+####################
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)
+
+
