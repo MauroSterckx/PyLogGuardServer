@@ -48,6 +48,18 @@ def read_all():
     cursor.execute("SELECT * FROM logs")
     return cursor.fetchall()
 
+@app.get('/byId/{id}') # returns log by id
+def read_byId(id: int):
+    try:
+        cursor.execute("SELECT * FROM logs WHERE id = ?", (id,))
+        log = cursor.fetchone()
+        if log:
+            return log
+        else:
+            return {"Error:","Log not found"}
+    except Exception as e:
+        return {"Error:", str(e)}
+
 ####################
 
 #Post Route:
