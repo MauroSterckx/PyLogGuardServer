@@ -1,2 +1,2 @@
 # PyLogGuardClient
-A Python logging system client
+A Python logging system server
